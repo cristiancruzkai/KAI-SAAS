@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "asistente-comercial-8d43c"
+    "testing": "tu-proyecto-testing-id",
+    "production": "tu-proyecto-produccion-id"
   }
 }
