@@ -1,0 +1,51 @@
+{
+  "version": "7.1",
+  "data_api_version": "3.0",
+  "routing_model": {
+    "CONFIRM_NOTIFY_ADVISOR": []
+  },
+  "screens": [
+    {
+      "id": "CONFIRM_NOTIFY_ADVISOR",
+      "title": "🧾 Detalles",
+      "terminal": true,
+      "data": {
+        "formatText": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "__example__": [
+            "# ⭐ Nuevo Prospecto",
+            "- 🕚 Fecha y Hora: 15 de Septiembre 12:00 PM",
+            "- 👤 Nombre: Marlon David Rodriguez Rojas",
+            "- 📞 Número de Teléfono: 9931467584",
+            "- ⚠️ Tipo de Oferta: Diplomado",
+            "- ⭐️ Oferta de Interés: Diplomado Ejecutivo en Gestión Integral QHSE",
+            "- 🗺️ Ciudad: Villahermosa",
+            "*Para notificar al cliente que será atendido toca el botón verde* ✅"
+          ]
+        }
+      },
+      "layout": {
+        "type": "SingleColumnLayout",
+        "children": [
+          {
+            "type": "RichText",
+            "text": "${data.formatText}"
+          },
+          {
+            "type": "Footer",
+            "label": "COMPLETAR SOLICITUD",
+            "on-click-action": {
+              "name": "complete",
+              "payload": {
+                "status": "interes_procesado"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
