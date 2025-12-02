@@ -1,0 +1,35 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "description": "Frontend for kAI dashboard web SaaS",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cristiancruzkai/KAI-SAAS.git"
+  },
+  "author": "kAI Labs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cristiancruzkai/KAI-SAAS/issues"
+  },
+  "homepage": "https://github.com/cristiancruzkai/KAI-SAAS#readme",
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "prettier": "^3.7.3",
+    "turbo": "^2.6.1",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "firebase": "^12.6.0"
+  }
+}
