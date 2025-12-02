@@ -5,15 +5,11 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { 
-  Bot, 
-  Briefcase, 
-  Users, 
-  MessageSquare, 
-  FolderOpen,
   ChevronDown 
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { KaiLogo } from '@/components/ui/KaiLogo';
+import { SidebarQR } from './SidebarQR';
 
 interface Agent {
   id: string;
@@ -34,40 +30,23 @@ export function Sidebar() {
   const [agentMenuOpen, setAgentMenuOpen] = useState(true);
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-blue-600 to-blue-700 text-white flex flex-col h-screen overflow-hidden">
+    <aside className="w-64 bg-white/20 rounded-2xl shadow-[0px_0px_20px_0px_rgba(0,24,138,0.12)] flex flex-col h-screen overflow-hidden m-4 border border-white/40 backdrop-blur-xl">
       {/* Logo */}
-      <div className="relative mb-6">
+      <div className="relative mb-6 shrink-0">
         <div className="w-48 h-24 bg-blue-900 rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)] flex items-center justify-center -mt-5 -ml-5">
           <KaiLogo className="h-9 w-auto" />
         </div>
       </div>
 
-      {/* Navigation Icons */}
-      <div className="px-4 space-y-2">
-        <Button variant="ghost" size="icon" className="w-full justify-start text-white hover:bg-blue-500">
-          <Bot className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="w-full justify-start text-white hover:bg-blue-500">
-          <Briefcase className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="w-full justify-start text-white hover:bg-blue-500">
-          <Users className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="w-full justify-start text-white hover:bg-blue-500">
-          <MessageSquare className="h-5 w-5" />
-        </Button>
-        <Button variant="ghost" size="icon" className="w-full justify-start text-white hover:bg-blue-500">
-          <FolderOpen className="h-5 w-5" />
-        </Button>
-      </div>
-
-      <Separator className="my-4 bg-blue-500" />
+      {/* Navigation Icons - REMOVED (Moved to GlobalSidebar) */}
+      
+      <Separator className="my-4 bg-slate-200" />
 
       {/* Agent Selector */}
-      <div className="px-4 flex-1">
+      <div className="px-4 flex-1 flex flex-col min-h-0">
         <Button
           variant="ghost"
-          className="w-full justify-between text-white hover:bg-blue-500 mb-2"
+          className="w-full justify-between text-slate-700 hover:bg-blue-50 mb-2 shrink-0"
           onClick={() => setAgentMenuOpen(!agentMenuOpen)}
         >
           <span className="font-semibold">{selectedAgent}</span>
@@ -78,28 +57,28 @@ export function Sidebar() {
         </Button>
 
         {agentMenuOpen && (
-          <div className="space-y-1 mb-4 bg-blue-700 rounded-lg p-2">
-            <button className="w-full text-left px-3 py-1.5 text-sm hover:bg-blue-800 rounded">
+          <div className="space-y-1 mb-4 bg-slate-100/50 rounded-lg p-2 shrink-0">
+            <button className="w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-white hover:shadow-sm rounded transition-all">
               Editar Agente
             </button>
-            <button className="w-full text-left px-3 py-1.5 text-sm hover:bg-blue-800 rounded">
+            <button className="w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-white hover:shadow-sm rounded transition-all">
               Todos
             </button>
-            <button className="w-full text-left px-3 py-1.5 text-sm hover:bg-blue-800 rounded">
+            <button className="w-full text-left px-3 py-1.5 text-sm text-slate-600 hover:bg-white hover:shadow-sm rounded transition-all">
               Enviar recordatorios
             </button>
           </div>
         )}
 
-        <ScrollArea className="h-64">
-          <div className="space-y-1">
+        <ScrollArea className="flex-1 -mx-2 px-2">
+          <div className="space-y-1 pb-4">
             {agents.map((agent) => (
               <Button
                 key={agent.id}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start text-white hover:bg-blue-500",
-                  selectedAgent === agent.name && "bg-blue-500"
+                  "w-full justify-start text-slate-600 hover:bg-blue-50 hover:text-blue-700",
+                  selectedAgent === agent.name && "bg-blue-700 text-white hover:bg-blue-800 hover:text-white shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)] rounded-[10px]"
                 )}
                 onClick={() => setSelectedAgent(agent.name)}
               >
@@ -112,13 +91,8 @@ export function Sidebar() {
       </div>
 
       {/* QR Section */}
-      <div className="p-4 bg-blue-800/50 m-4 rounded-lg">
-        <div className="bg-white p-3 rounded-lg mb-2">
-          <div className="w-full aspect-square bg-gray-200 rounded" />
-        </div>
-        <p className="text-xs text-center">
-          Escanea y genera tu Agente desde WhatsApp
-        </p>
+      <div className="p-4 flex justify-center shrink-0">
+        <SidebarQR />
       </div>
     </aside>
   );
