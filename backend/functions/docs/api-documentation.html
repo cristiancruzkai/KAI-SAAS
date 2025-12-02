@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAI-SAAS API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 KAI-SAAS API Documentation</h1>
+            <p>Cloud Functions para gestión de agentes de IA</p>
+        </header>
+
+        <div class="base-url">
+            <h3>🌐 Base URL</h3>
+            <code>https://us-central1-asistente-comercial-8d43c.cloudfunctions.net</code>
+        </div>
+
+        <div class="security-note">
+            <strong>⚠️ Modo de Desarrollo:</strong> Las APIs actualmente son públicas. Para producción se recomienda
+            implementar Firebase Authentication con tokens Bearer.
+        </div>
+
+        <div class="controls">
+            <button class="expand-all-btn" onclick="toggleAll(false)">📖 Expandir Todas</button>
+            <button class="expand-all-btn" onclick="toggleAll(true)">📕 Colapsar Todas</button>
+        </div>
+
+        <!-- GET AGENTS BY USER ID -->
+        <div class="endpoint collapsed" id="endpoint-1">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-1')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method get">GET</span>
+                    <h2 class="endpoint-title">/getAgentsByUserId</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Obtiene todos los agentes asociados a un usuario desde la colección
+                    <code>usersBuilders/{userId}/agentDrafts</code>.
+                </p>
+
+                <h3>Parámetros</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Parámetro</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>userId</code></td>
+                            <td>string</td>
+                            <td><span class="required">✅ Sí</span></td>
+                            <td>ID del usuario propietario de los agentes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ejemplo de Request</h3>
+                <div class="code-block">
+                    <pre>GET /getAgentsByUserId?userId=q5ia05np1XNIGQr6KaigStsb0Fs1</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Respuesta exitosa</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "userId": "q5ia05np1XNIGQr6KaigStsb0Fs1",
+    "agents": [
+      {
+        "id": "3b01d3b2-742e-4d80-85ff-8613eae9abc6",
+        "name": "Agente de Ventas",
+        "status": "active"
+      }
+    ],
+    "total": 1
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET AGENT BY ID -->
+        <div class="endpoint collapsed" id="endpoint-2">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-2')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method get">GET</span>
+                    <h2 class="endpoint-title">/getAgentById</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Obtiene un agente específico con todos sus campos y los nombres de sus subcolecciones.
+                </p>
+
+                <h3>Parámetros</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Parámetro</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>id</code></td>
+                            <td>string</td>
+                            <td><span class="required">✅ Sí</span></td>
+                            <td>ID del agente</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ejemplo de Request</h3>
+                <div class="code-block">
+                    <pre>GET /getAgentById?id=3b01d3b2-742e-4d80-85ff-8613eae9abc6</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Respuesta exitosa</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "id": "3b01d3b2-742e-4d80-85ff-8613eae9abc6",
+    "name": "Agente de Ventas",
+    "collections": [
+      "chats", "knowledgeBase", "modifications",
+      "properties", "sheets", "tools", "users"
+    ]
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET COLLECTION BY AGENT ID -->
+        <div class="endpoint collapsed" id="endpoint-3">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-3')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method get">GET</span>
+                    <h2 class="endpoint-title">/getCollectionByAgentId</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Obtiene todos los documentos de una colección específica de un agente.
+                    <strong>Incluye validación de seguridad</strong> para verificar que el agente pertenece al usuario.
+                </p>
+
+                <div class="security-note">
+                    <strong>🧪 Modo Test:</strong> Usa <code>userId=testid</code> para saltarse la validación de
+                    seguridad durante desarrollo.
+                </div>
+
+                <h3>Parámetros</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Parámetro</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>userId</code></td>
+                            <td>string</td>
+                            <td><span class="required">✅ Sí</span></td>
+                            <td>ID del usuario (usa "testid" para testing)</td>
+                        </tr>
+                        <tr>
+                            <td><code>agentId</code></td>
+                            <td>string</td>
+                            <td><span class="required">✅ Sí</span></td>
+                            <td>ID del agente</td>
+                        </tr>
+                        <tr>
+                            <td><code>collectionName</code></td>
+                            <td>string</td>
+                            <td><span class="required">✅ Sí</span></td>
+                            <td>Nombre de la colección</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Colecciones disponibles</h3>
+                <div class="collections-list">
+                    <span class="collection-tag">chats</span>
+                    <span class="collection-tag">knowledgeBase</span>
+                    <span class="collection-tag">modifications</span>
+                    <span class="collection-tag">properties</span>
+                    <span class="collection-tag">sheets</span>
+                    <span class="collection-tag">tools</span>
+                    <span class="collection-tag">users</span>
+                </div>
+
+                <h3>Ejemplo de Request (Modo Normal)</h3>
+                <div class="code-block">
+                    <pre>GET /getCollectionByAgentId?userId=q5ia05np1XNIGQr6KaigStsb0Fs1&agentId=3b01d3b2-742e-4d80-85ff-8613eae9abc6&collectionName=knowledgeBase</pre>
+                </div>
+
+                <h3>Ejemplo de Request (Modo Test)</h3>
+                <div class="code-block">
+                    <pre>GET /getCollectionByAgentId?userId=testid&agentId=3b01d3b2-742e-4d80-85ff-8613eae9abc6&collectionName=knowledgeBase</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Respuesta exitosa (con documentos)</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "userId": "testid",
+    "agentId": "3b01d3b2-742e-4d80-85ff-8613eae9abc6",
+    "collectionName": "knowledgeBase",
+    "documents": [
+      {
+        "id": "doc1",
+        "title": "Información del producto",
+        "content": "Detalles..."
+      }
+    ],
+    "total": 1,
+    "path": "agent_configurations/3b01d3b2.../knowledgeBase"
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge error">403 Forbidden</span> Acceso denegado</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": false,
+  "error": "Access denied: Agent does not belong to this user"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPDATE AGENT -->
+        <div class="endpoint collapsed" id="endpoint-4">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-4')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method post">POST</span>
+                    <h2 class="endpoint-title">/updateAgent</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Actualiza los campos de un agente existente.
+                </p>
+
+                <h3>Request Body (JSON)</h3>
+                <div class="code-block">
+                    <pre>{
+  "agentId": "3b01d3b2-742e-4d80-85ff-8613eae9abc6",
+  "updates": {
+    "name": "Nuevo nombre",
+    "description": "Nueva descripción",
+    "status": "active"
+  }
+}</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Respuesta exitosa</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "message": "Agent updated successfully"
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📝 Última actualización: 2025-12-01</p>
+            <p>Para más información, consulta <code>docs/API-README.md</code> o <code>docs/api-documentation.yaml</code>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle individual endpoint
+        function toggleEndpoint(id) {
+            const endpoint = document.getElementById(id);
+            endpoint.classList.toggle('collapsed');
+        }
+
+        // Toggle all endpoints
+        function toggleAll(collapse) {
+            const endpoints = document.querySelectorAll('.endpoint');
+            endpoints.forEach(endpoint => {
+                if (collapse) {
+                    endpoint.classList.add('collapsed');
+                } else {
+                    endpoint.classList.remove('collapsed');
+                }
+            });
+        }
+
+        // Expand first endpoint by default on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstEndpoint = document.getElementById('endpoint-1');
+            if (firstEndpoint) {
+                firstEndpoint.classList.remove('collapsed');
+            }
+        });
+    </script>
+</body>
+
+</html>
