@@ -34,10 +34,10 @@ export function Sidebar() {
   const [agentMenuOpen, setAgentMenuOpen] = useState(true);
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-blue-600 to-blue-700 text-white flex flex-col h-screen">
+    <aside className="w-64 bg-gradient-to-b from-blue-600 to-blue-700 text-white flex flex-col h-screen overflow-hidden">
       {/* Logo */}
-      <div className="p-6">
-        <div className="px-2 py-1">
+      <div className="relative mb-6">
+        <div className="w-48 h-24 bg-blue-900 rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)] flex items-center justify-center -mt-5 -ml-5">
           <KaiLogo className="h-9 w-auto" />
         </div>
       </div>
