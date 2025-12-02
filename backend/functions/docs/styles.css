@@ -1,0 +1,277 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f7fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.base-url {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.base-url h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.base-url code {
+    background: #f1f3f5;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: block;
+    font-family: 'Courier New', monospace;
+    color: #495057;
+    overflow-x: auto;
+}
+
+.endpoint {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid #667eea;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.endpoint:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 25px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.endpoint-header:hover {
+    background: #f8f9fa;
+}
+
+.endpoint-header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.collapse-icon {
+    font-size: 1.2em;
+    color: #667eea;
+    transition: transform 0.3s ease;
+    font-weight: bold;
+}
+
+.endpoint.collapsed .collapse-icon {
+    transform: rotate(-90deg);
+}
+
+.method {
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    min-width: 60px;
+    text-align: center;
+}
+
+.method.get {
+    background: #28a745;
+    color: white;
+}
+
+.method.post {
+    background: #007bff;
+    color: white;
+}
+
+.endpoint-title {
+    font-size: 1.3em;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.endpoint-content {
+    padding: 0 25px 25px 25px;
+    max-height: 5000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.endpoint.collapsed .endpoint-content {
+    max-height: 0;
+    padding: 0 25px;
+}
+
+.description {
+    color: #6c757d;
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+.params-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.params-table th,
+.params-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.params-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.required {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.code-block {
+    background: #2d3748;
+    color: #e2e8f0;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.code-block pre {
+    margin: 0;
+}
+
+.response-example {
+    margin-top: 15px;
+}
+
+.response-example h4 {
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.badge.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.badge.warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.security-note {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.security-note strong {
+    color: #856404;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+    margin-top: 40px;
+}
+
+.collections-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.collection-tag {
+    background: #e9ecef;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.9em;
+    color: #495057;
+}
+
+.expand-all-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 20px;
+    transition: background 0.3s;
+}
+
+.expand-all-btn:hover {
+    background: #5568d3;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}

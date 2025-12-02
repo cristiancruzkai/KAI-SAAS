@@ -6,8 +6,8 @@
 .env
 .env.*
 .env.local
-.env.testing
-.env.production
+*/functions/.env.testing
+*/functions/.env.production
 .runtimeconfig.json
 */.env
 */.env.*

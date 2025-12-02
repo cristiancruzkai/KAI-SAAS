@@ -1,0 +1,379 @@
+openapi: 3.0.0
+info:
+  title: KAI-SAAS Agent Management API
+  description: |
+    API para gestión de agentes de IA en el panel de administración.
+    
+    ## Autenticación
+    Actualmente las APIs son públicas. En producción se recomienda usar Firebase Authentication.
+    
+    ## Base URL
+    `https://us-central1-asistente-comercial-8d43c.cloudfunctions.net`
+    
+    ## Seguridad
+    - Todas las APIs validan que el agente pertenezca al usuario
+    - Modo test disponible con `userId=testid` para desarrollo
+    
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: desgarcia2112@gmail.com
+
+servers:
+  - url: https://us-central1-asistente-comercial-8d43c.cloudfunctions.net
+    description: Production server
+
+tags:
+  - name: Agents
+    description: Operaciones relacionadas con agentes
+  - name: Collections
+    description: Operaciones sobre colecciones de agentes
+
+paths:
+  /getAgentsByUserId:
+    get:
+      tags:
+        - Agents
+      summary: Obtener todos los agentes de un usuario
+      description: |
+        Retorna todos los agentes asociados a un usuario desde la colección `usersBuilders/{userId}/agentDrafts`.
+        Cada agente incluye todos sus campos en formato JSON.
+      operationId: getAgentsByUserId
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: ID del usuario propietario de los agentes
+          schema:
+            type: string
+          example: q5ia05np1XNIGQr6KaigStsb0Fs1
+      responses:
+        '200':
+          description: Lista de agentes obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: q5ia05np1XNIGQr6KaigStsb0Fs1
+                      agents:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Agent'
+                      total:
+                        type: integer
+                        example: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /getAgentById:
+    get:
+      tags:
+        - Agents
+      summary: Obtener un agente por ID
+      description: |
+        Obtiene un agente específico de la colección `agent_configurations` con todos sus campos
+        y los nombres de todas sus subcolecciones dinámicamente.
+      operationId: getAgentById
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID del agente
+          schema:
+            type: string
+          example: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+      responses:
+        '200':
+          description: Agente obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    allOf:
+                      - $ref: '#/components/schemas/Agent'
+                      - type: object
+                        properties:
+                          collections:
+                            type: array
+                            description: Nombres de las subcolecciones del agente
+                            items:
+                              type: string
+                            example: ["chats", "knowledgeBase", "modifications", "properties", "sheets", "tools", "users"]
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /getCollectionByAgentId:
+    get:
+      tags:
+        - Collections
+      summary: Obtener documentos de una colección específica de un agente
+      description: |
+        Obtiene todos los documentos de una colección específica de un agente.
+        Incluye validación de seguridad para verificar que el agente pertenece al usuario.
+        
+        **Modo Test:** Usa `userId=testid` para saltarse la validación de seguridad durante desarrollo.
+        
+        **Ruta en Firestore:** `agent_configurations/{agentId}/{collectionName}`
+      operationId: getCollectionByAgentId
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: ID del usuario (para validación de seguridad). Usa "testid" para modo test.
+          schema:
+            type: string
+          example: q5ia05np1XNIGQr6KaigStsb0Fs1
+        - name: agentId
+          in: query
+          required: true
+          description: ID del agente
+          schema:
+            type: string
+          example: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+        - name: collectionName
+          in: query
+          required: true
+          description: Nombre de la colección a consultar
+          schema:
+            type: string
+            enum:
+              - chats
+              - knowledgeBase
+              - modifications
+              - properties
+              - sheets
+              - tools
+              - users
+          example: knowledgeBase
+      responses:
+        '200':
+          description: Documentos de la colección obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        example: q5ia05np1XNIGQr6KaigStsb0Fs1
+                      agentId:
+                        type: string
+                        example: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+                      collectionName:
+                        type: string
+                        example: knowledgeBase
+                      documents:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              description: ID del documento
+                          additionalProperties: true
+                      total:
+                        type: integer
+                        example: 5
+                      path:
+                        type: string
+                        example: agent_configurations/3b01d3b2-742e-4d80-85ff-8613eae9abc6/knowledgeBase
+              examples:
+                withDocuments:
+                  summary: Colección con documentos
+                  value:
+                    success: true
+                    data:
+                      userId: q5ia05np1XNIGQr6KaigStsb0Fs1
+                      agentId: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+                      collectionName: knowledgeBase
+                      documents:
+                        - id: doc1
+                          title: "Información del producto"
+                          content: "Detalles sobre el producto..."
+                        - id: doc2
+                          title: "Preguntas frecuentes"
+                          content: "FAQ del servicio..."
+                      total: 2
+                      path: agent_configurations/3b01d3b2-742e-4d80-85ff-8613eae9abc6/knowledgeBase
+                emptyCollection:
+                  summary: Colección vacía
+                  value:
+                    success: true
+                    data:
+                      userId: q5ia05np1XNIGQr6KaigStsb0Fs1
+                      agentId: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+                      collectionName: chats
+                      documents: []
+                      total: 0
+                      message: La colección "chats" no tiene documentos
+                      availableCollections: ["knowledgeBase", "tools", "users"]
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          description: Acceso denegado - El agente no pertenece al usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Access denied: Agent does not belong to this user"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /updateAgent:
+    post:
+      tags:
+        - Agents
+      summary: Actualizar un agente
+      description: Actualiza los campos de un agente existente
+      operationId: updateAgent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                agentId:
+                  type: string
+                  description: ID del agente a actualizar
+                updates:
+                  type: object
+                  description: Campos a actualizar
+                  additionalProperties: true
+              required:
+                - agentId
+                - updates
+      responses:
+        '200':
+          description: Agente actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Agent updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  schemas:
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID único del agente
+          example: 3b01d3b2-742e-4d80-85ff-8613eae9abc6
+        name:
+          type: string
+          description: Nombre del agente
+          example: "Agente de Ventas"
+        description:
+          type: string
+          description: Descripción del agente
+        status:
+          type: string
+          description: Estado del agente
+          enum: [active, inactive, draft]
+          example: active
+        createdAt:
+          type: string
+          format: date-time
+          description: Fecha de creación
+        updatedAt:
+          type: string
+          format: date-time
+          description: Última actualización
+      additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Petición inválida - Parámetros faltantes o incorrectos
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                type: string
+                example: "User ID is required"
+    
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                type: string
+                example: "Agent not found"
+    
+    InternalError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                type: string
+                example: "Failed to get agents"
+              details:
+                type: string
+                description: Detalles técnicos del error
