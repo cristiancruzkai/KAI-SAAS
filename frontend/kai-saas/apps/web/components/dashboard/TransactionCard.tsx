@@ -1,80 +1,86 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 interface TransactionCardProps {
-  color?: 'blue' | 'yellow' | 'purple';
+  variant?: 'green' | 'yellow' | 'blue';
 }
 
-export function TransactionCard({ color = 'blue' }: TransactionCardProps) {
+export function TransactionCard({ variant = 'green' }: TransactionCardProps) {
   const colors = {
-    blue: {
-      income: 'bg-blue-600',
-      expense: 'bg-blue-900',
+    green: {
+      income: 'bg-emerald-400',
+      incomeDot: 'bg-emerald-400',
     },
     yellow: {
       income: 'bg-yellow-400',
-      expense: 'bg-blue-900',
+      incomeDot: 'bg-yellow-400',
     },
-    purple: {
-      income: 'bg-purple-600',
-      expense: 'bg-purple-900',
+    blue: {
+      income: 'bg-blue-500',
+      incomeDot: 'bg-blue-500',
     },
   };
 
   const data = [
-    { income: 60, expense: 40 },
-    { income: 90, expense: 70 },
-    { income: 70, expense: 50 },
+    { income: 45, expense: 65 },
+    { income: 55, expense: 75 },
+    { income: 35, expense: 55 },
+    { income: 60, expense: 85 },
+    { income: 40, expense: 60 },
+    { income: 50, expense: 70 },
+    { income: 45, expense: 80 },
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Resumen Financiero</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {/* Legend */}
-        <div className="flex items-center gap-4 mb-4 text-sm">
-          <div className="flex items-center gap-2">
-            <div className={`w-3 h-3 rounded-full ${colors[color].income}`} />
-            <span>Ingresos</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className={`w-3 h-3 rounded-full ${colors[color].expense}`} />
-            <span>Gastos</span>
-          </div>
+    <div className="bg-white rounded-2xl p-6 shadow-sm">
+      {/* Header */}
+      <h3 className="text-subtitle font-bold text-slate-800 mb-4">Transaction Overview</h3>
+      
+      {/* Legend */}
+      <div className="flex items-center gap-5 mb-5 text-textnormal">
+        <div className="flex items-center gap-2">
+          <div className={`w-3 h-3 rounded-full ${colors[variant].incomeDot}`} />
+          <span className="text-gray-600">Income</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-blue-800" />
+          <span className="text-gray-600">Expense</span>
+        </div>
+      </div>
+
+      {/* Chart Area */}
+      <div className="relative">
+        {/* Y-axis labels */}
+        <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-textnormal text-gray-300 pr-2">
+          <span>100</span>
+          <span>80</span>
+        </div>
+        
+        {/* Tooltip */}
+        <div className="absolute right-4 top-0 bg-white rounded-xl shadow-lg p-3 text-center z-10 border border-gray-100">
+          <p className="text-subtitle font-bold text-slate-800">$85,66</p>
+          <p className="text-textnormal text-gray-400">Expense</p>
         </div>
 
-        {/* Amount */}
-        <div className="text-right mb-4">
-          <p className="text-2xl font-bold">$8,566</p>
-          <p className="text-sm text-muted-foreground">Gastos Totales</p>
-        </div>
+        {/* Horizontal dashed lines */}
+        <div className="absolute left-6 right-0 top-4 border-t border-dashed border-emerald-200"></div>
+        <div className="absolute left-6 right-0 top-12 border-t border-dashed border-emerald-200"></div>
 
         {/* Bar Chart */}
-        <div className="flex items-end justify-around h-32 gap-4">
+        <div className="flex items-end justify-around h-32 gap-3 pl-8 pt-8">
           {data.map((item, i) => (
-            <div key={i} className="flex items-end gap-2 flex-1">
+            <div key={i} className="flex items-end gap-1 flex-1">
               <div
-                className={`${colors[color].expense} rounded-t w-full`}
-                style={{ height: `${item.expense}%` }}
+                className={`${colors[variant].income} rounded-full w-2`}
+                style={{ height: `${item.income}%` }}
               />
               <div
-                className={`${colors[color].income} rounded-t w-full`}
-                style={{ height: `${item.income}%` }}
+                className="bg-blue-800 rounded-full w-2"
+                style={{ height: `${item.expense}%` }}
               />
             </div>
           ))}
         </div>
-
-        {/* Y-axis labels */}
-        <div className="flex justify-between text-xs text-muted-foreground mt-2">
-          <span>80</span>
-          <span>80</span>
-          <span>100</span>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

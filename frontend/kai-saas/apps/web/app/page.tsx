@@ -9,33 +9,35 @@ import { TransactionCard } from '@/components/dashboard/TransactionCard';
 export default function Home() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Alert Banner */}
-        <AlertBanner
-          title="Nueva Integración Disponible"
-          description="Ahora puedes conectar tus agentes de KAI con WhatsApp Business API directamente desde el panel de control."
-          actionLabel="Configurar WhatsApp"
-          onAction={() => console.log('Action clicked')}
-        />
+        <AlertBanner />
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <StatCard label="Mensajes Procesados" value="128,430" />
-          <StatCard label="Agentes Activos" value="12" />
-          <StatCard label="Alertas del Sistema" value="3" variant="warning" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard />
+          <StatCard />
+          <StatCard />
         </div>
 
         {/* Métricas Section */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">Rendimiento</h2>
-          <MetricsChart />
+          <h2 className="text-title font-bold text-slate-800 mb-6">Métricas</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <MetricsChart />
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm min-h-[300px]">
+              {/* Empty card */}
+            </div>
+          </div>
         </div>
 
         {/* Transaction Overview Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <TransactionCard color="blue" />
-          <TransactionCard color="yellow" />
-          <TransactionCard color="purple" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <TransactionCard variant="green" />
+          <TransactionCard variant="yellow" />
+          <TransactionCard variant="blue" />
         </div>
       </div>
     </DashboardLayout>

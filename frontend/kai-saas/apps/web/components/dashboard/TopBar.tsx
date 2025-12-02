@@ -1,35 +1,32 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Bell, ChevronDown } from 'lucide-react';
 
 export function TopBar() {
   return (
-    <header className="h-16 border-b bg-white flex items-center justify-between px-6">
+    <header className="h-20 bg-transparent flex items-center justify-between px-8">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm">
-        <span className="text-muted-foreground">Tus Agentes</span>
-        <span className="text-muted-foreground">/</span>
-        <span className="font-medium">Dashboard Bimo</span>
+      <div className="flex items-center gap-2 text-textnormal">
+        <span className="text-gray-500">Tus Agentes</span>
+        <span className="text-gray-400">›</span>
+        <span className="font-semibold text-slate-800">Dashboard Bimo</span>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
-        </Button>
+        <button className="p-2.5 bg-white rounded-xl shadow-sm text-gray-500 hover:text-blue-600 transition-colors relative">
+          <Bell size={20} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
+        </button>
 
         {/* User Menu */}
-        <Button variant="ghost" className="gap-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-blue-600 text-white">SS</AvatarFallback>
-          </Avatar>
-          <ChevronDown className="h-4 w-4" />
-        </Button>
+        <button className="flex items-center gap-2 bg-white rounded-xl shadow-sm p-1.5 pr-3 hover:bg-gray-50 transition-colors">
+          <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
+            <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+          </div>
+          <ChevronDown size={16} className="text-gray-400" />
+        </button>
       </div>
     </header>
   );
