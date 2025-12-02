@@ -37,6 +37,14 @@ a {
 }
 
 @theme inline {
+  /* Typography */
+  --font-size-title: 30px;
+  --font-size-title--line-height: 1.2;
+  --font-size-subtitle: 14px;
+  --font-size-subtitle--line-height: 1.5;
+  --font-size-textnormal: 12px;
+  --font-size-textnormal--line-height: 1.5;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -149,5 +157,21 @@ a {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Typography Utilities */
+@layer utilities {
+  .text-title {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+  .text-subtitle {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .text-textnormal {
+    font-size: 12px;
+    line-height: 1.5;
   }
 }

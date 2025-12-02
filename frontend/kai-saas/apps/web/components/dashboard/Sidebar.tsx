@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { KaiLogo } from '@/components/ui/KaiLogo';
 import { SidebarQR } from './SidebarQR';
 
 interface Agent {
@@ -25,16 +24,9 @@ export function Sidebar() {
   const [agentMenuOpen, setAgentMenuOpen] = useState(true);
 
   return (
-    <aside className="w-64 bg-white/80 rounded-2xl shadow-[0px_0px_20px_0px_rgba(0,24,138,0.12)] flex flex-col h-[calc(100vh-2rem)] overflow-hidden m-4 border border-white/40 backdrop-blur-xl">
-      {/* Logo */}
-      <div className="relative mb-2 shrink-0">
-        <div className="w-48 h-24 bg-blue-900 rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)] flex items-center justify-center -mt-5 -ml-5">
-          <KaiLogo className="h-9 w-auto" />
-        </div>
-      </div>
-
+    <aside className="w-64 bg-white/80 rounded-2xl shadow-[0px_0px_20px_0px_rgba(0,24,138,0.12)] flex flex-col h-full overflow-hidden m-4 mt-0 border border-white/40 backdrop-blur-xl">
       {/* Agent Selector */}
-      <div className="px-5 flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div className="px-5 pt-5 flex-1 flex flex-col min-h-0 overflow-hidden">
         <button
           className="w-full bg-blue-700 text-white rounded-xl p-3 flex items-center justify-between mb-1 shadow-lg hover:bg-blue-800 transition-colors shrink-0"
           onClick={() => setAgentMenuOpen(!agentMenuOpen)}
