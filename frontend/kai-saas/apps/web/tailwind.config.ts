@@ -8,7 +8,16 @@ const config: Config = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-nunito-sans)", "sans-serif"],
+      },
+      fontSize: {
+        title: ["30px", { lineHeight: "1.2" }],
+        subtitle: ["14px", { lineHeight: "1.5" }],
+        textnormal: ["12px", { lineHeight: "1.5" }],
+      },
+    },
   },
   plugins: [],
 };
