@@ -59,7 +59,7 @@ export default function Sidebar() {
       
       {/* QR Section */}
       <div className="w-48 h-60 left-[10px] top-[535px] absolute bg-gradient-to-b from-amber-200/30 to-white/30 rounded-[10px] shadow-[0px_0px_20px_0px_rgba(1,0,245,0.10)] shadow-[inset_0px_0px_26px_21px_rgba(255,255,255,0.50)]" />
-      <img className="w-28 h-28 left-[43px] top-[564px] absolute rounded-2xl" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wa.me/1234567890" />
+      <img className="w-28 h-28 left-[43px] top-[564px] absolute rounded-2xl" src="/qr.png" />
       <div className="w-32 h-12 left-[41px] top-[708px] absolute text-center justify-start text-neutral-800 text-base font-normal font-['Nunito_Sans'] leading-4">
         Escanea y genera tu Agente desde WhatsApp
       </div>
