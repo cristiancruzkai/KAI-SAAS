@@ -4,7 +4,11 @@ export default function TopBar() {
   return (
     <div className="w-[1310px] h-24 left-[65px] top-[-22px] absolute">
       <div className="w-52 h-24 left-0 top-0 absolute bg-[#00188A] rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)]" />
-      <div className="w-2 h-1 left-[344px] top-[84px] absolute origin-top-left -rotate-90 opacity-50 outline outline-2 outline-offset-[-1px] outline-black" />
+      <div className="absolute left-[344px] top-[77px] rotate-90">
+        <svg width="9" height="6" viewBox="0 0 9 6" fill="none">
+          <path d="M1 5L4.5 1L8 5" stroke="black" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
       <div className="left-[248px] top-[70px] absolute justify-start text-slate-900 text-sm font-bold font-['Nunito_Sans']">Tus Agentes</div>
       <div className="left-[362px] top-[70px] absolute justify-start text-slate-900 text-sm font-bold font-['Nunito_Sans']">Dashboard Bimo</div>
       
