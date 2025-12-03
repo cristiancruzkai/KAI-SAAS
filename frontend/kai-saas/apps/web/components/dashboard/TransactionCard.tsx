@@ -9,14 +9,20 @@ export function TransactionCard({ variant = 'green' }: TransactionCardProps) {
     green: {
       income: 'bg-emerald-400',
       incomeDot: 'bg-emerald-400',
+      expense: 'bg-emerald-500',
+      expenseDot: 'bg-emerald-500',
     },
     yellow: {
       income: 'bg-yellow-400',
       incomeDot: 'bg-yellow-400',
+      expense: 'bg-blue-900',
+      expenseDot: 'bg-blue-900',
     },
     blue: {
       income: 'bg-blue-500',
       incomeDot: 'bg-blue-500',
+      expense: 'bg-blue-900',
+      expenseDot: 'bg-blue-900',
     },
   };
 
@@ -42,7 +48,7 @@ export function TransactionCard({ variant = 'green' }: TransactionCardProps) {
           <span className="text-gray-600">Income</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-blue-800" />
+          <div className={`w-3 h-3 rounded-full ${colors[variant].expenseDot}`} />
           <span className="text-gray-600">Expense</span>
         </div>
       </div>
@@ -74,7 +80,7 @@ export function TransactionCard({ variant = 'green' }: TransactionCardProps) {
                 style={{ height: `${item.income}%` }}
               />
               <div
-                className="bg-blue-800 rounded-full w-2"
+                className={`${colors[variant].expense} rounded-full w-2`}
                 style={{ height: `${item.expense}%` }}
               />
             </div>

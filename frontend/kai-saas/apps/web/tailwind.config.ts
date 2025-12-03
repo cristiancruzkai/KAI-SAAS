@@ -17,6 +17,12 @@ const config: Config = {
         subtitle: ["14px", { lineHeight: "1.5" }],
         textnormal: ["12px", { lineHeight: "1.5" }],
       },
+      colors: {
+        kai: {
+          blue: "#0100F5",
+          yellow: "#F5E455",
+        },
+      },
     },
   },
   plugins: [],

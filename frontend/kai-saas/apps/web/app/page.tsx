@@ -15,21 +15,19 @@ export default function Home() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard />
-          <StatCard />
-          <StatCard />
+          <StatCard title="Base de Conocimiento" imageSrc="/conocimiento.png" />
+          <StatCard title="Galeria de Tools" imageSrc="/tools.png" />
+          <StatCard title="Bandeja de entrada" imageSrc="/bandeja.png" />
         </div>
 
         {/* Métricas Section */}
         <div>
           <h2 className="text-title font-bold text-slate-800 mb-6">Métricas</h2>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               <MetricsChart />
             </div>
-            <div className="bg-white rounded-2xl shadow-sm min-h-[300px]">
-              {/* Empty card */}
-            </div>
+            
           </div>
         </div>
 

@@ -45,6 +45,10 @@ a {
   --font-size-textnormal: 12px;
   --font-size-textnormal--line-height: 1.5;
 
+  /* Kai Colors */
+  --color-kai-blue: #0100F5;
+  --color-kai-yellow: #F5E455;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

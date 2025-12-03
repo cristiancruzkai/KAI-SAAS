@@ -1,6 +1,7 @@
 'use client';
 
 import { Bell, ChevronDown } from 'lucide-react';
+import { KaiButton } from '@/components/ui/KaiButton';
 
 export function TopBar() {
   return (
@@ -15,18 +16,22 @@ export function TopBar() {
       {/* Right Section */}
       <div className="flex items-center gap-3">
         {/* Notifications */}
-        <button className="p-2.5 bg-white rounded-xl shadow-sm text-gray-500 hover:text-blue-600 transition-colors relative">
-          <Bell size={20} />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white" />
-        </button>
+        <div className="w-12 h-12 relative bg-white/10 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] overflow-hidden">
+          <div className="w-6 h-6 left-[11px] top-[12px] absolute rounded-2xl">
+            <Bell size={24} className="w-6 h-6" />
+          </div>
+        </div>
 
         {/* User Menu */}
-        <button className="flex items-center gap-2 bg-white rounded-xl shadow-sm p-1.5 pr-3 hover:bg-gray-50 transition-colors">
-          <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
-            <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-          </div>
-          <ChevronDown size={16} className="text-gray-400" />
-        </button>
+        <div className="w-56 h-12 relative bg-white/10 rounded-[10px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.10)] overflow-hidden">
+          <div className="w-32 left-[65px] top-[16px] absolute justify-start text-black/80 text-sm font-bold font-['Nunito_Sans']">Miranda Villareal</div>
+        </div>
+
+        {/* Create Agent Button */}
+        <div className="w-32 h-12 relative rounded-2xl">
+          <div className="w-32 h-12 left-0 top-0 absolute bg-kai-blue rounded-2xl shadow-[0px_10px_30px_0px_rgba(0,0,0,0.05)]" />
+          <div className="w-24 left-[23px] top-[14px] absolute justify-start text-white text-sm font-bold font-['Nunito_Sans']">Crear Agente</div>
+        </div>
       </div>
     </header>
   );

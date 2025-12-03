@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@theme inline {
+  /* Typography */
+  --font-size-title: 30px;
+  --font-size-title--line-height: 1.2;
+  --font-size-subtitle: 14px;
+  --font-size-subtitle--line-height: 1.5;
+  --font-size-textnormal: 12px;
+  --font-size-textnormal--line-height: 1.5;
+
+  /* Kai Colors */
+  --color-kai-blue: #0100F5;
+  --color-kai-yellow: #F5E455;
+  
+  /* Additional colors for dashboard */
+  --color-green-500: #10b981;
+  --color-teal-500: #14b8a6;
+}
+
+/* Custom Typography Utilities */
+@layer utilities {
+  .text-title {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+  .text-subtitle {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .text-textnormal {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
