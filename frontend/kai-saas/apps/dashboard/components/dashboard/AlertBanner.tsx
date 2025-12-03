@@ -1,7 +1,7 @@
 export default function AlertBanner() {
   return (
     <div className="w-[1089px] h-48 left-[286px] top-[88px] absolute">
-      <img className="w-[1089px] h-48 left-0 top-0 absolute rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)]" src="/kaiBanner.png" />
+      <img className="w-[1089px] h-48 left-0 top-0 absolute rounded-2xl" src="/kaiBanner.png" />
       <div className="w-72 h-12 left-[27px] top-[60px] absolute justify-start text-white text-2xl font-semibold font-['Nunito_Sans']">
         Descubre el poder del nuevo panel web de kAI
       </div>

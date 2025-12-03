@@ -10,7 +10,7 @@ function StatCard({ title, imageSrc, left }: StatCardProps) {
   
       <img 
         src={imageSrc} 
-        className={`w-auto h-28 ${left} top-[295px] absolute rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)] bg-green-500`} 
+        className={`w-auto h-28 ${left} top-[295px] absolute rounded-2xl`} 
       />
       <div className={`${left === "left-[286px]" ? "left-[313px]" : left === "left-[654px]" ? "left-[678px]" : "left-[1045px]"} top-[328px] absolute justify-center text-white text-lg font-semibold font-['Nunito_Sans'] leading-5`}>
         {title.split(' ').map((word, i) => (

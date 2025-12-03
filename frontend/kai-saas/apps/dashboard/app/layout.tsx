@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import GlobalSidebar from "../components/dashboard/GlobalSidebar";
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
@@ -19,7 +20,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={`${nunitoSans.variable} font-sans`}>{children}</body>
+      <body className={`${nunitoSans.variable} font-sans`}>
+        {/* Global Sidebar - Persiste en todas las páginas */}
+        <GlobalSidebar />
+        
+        {/* Contenido principal - Cambia según la ruta */}
+        <main className="ml-14">
+          {children}
+        </main>
+      </body>
     </html>
   );
 }

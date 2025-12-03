@@ -1,6 +1,5 @@
 'use client';
 
-import GlobalSidebar from '../components/dashboard/GlobalSidebar';
 import TopBar from '../components/dashboard/TopBar';
 import Sidebar from '../components/dashboard/Sidebar';
 import AlertBanner from '../components/dashboard/AlertBanner';
@@ -10,10 +9,7 @@ import TransactionCard from '../components/dashboard/TransactionCard';
 
 export default function DashboardPage() {
   return (
-    <div className="w-[1440px] h-[932px] relative bg-gradient-to-b from-stone-50 to-indigo-100 rounded-[30px] overflow-hidden">
-      {/* Global Sidebar */}
-      <GlobalSidebar />
-      
+    <div className="w-full h-screen relative bg-gradient-to-b from-stone-50 to-indigo-100 overflow-hidden">
       {/* Top Navigation Bar */}
       <TopBar />
       
