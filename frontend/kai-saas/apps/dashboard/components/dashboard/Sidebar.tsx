@@ -1,11 +1,38 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 export default function Sidebar() {
+  const pathname = usePathname();
+  
+  const isActive = (path: string) => pathname === path;
+  
+  const agents = [
+    { name: 'Super Sanchez', path: '/super-sanchez', expanded: true },
+    { name: 'Pereyra', path: '/pereyra' },
+    { name: 'Bimo', path: '/bimo' },
+    { name: 'Ventanito', path: '/ventanito' },
+    { name: 'Shuster', path: '/shuster' },
+    { name: 'ADO', path: '/ado' },
+    { name: 'Feria Tabasco', path: '/feria-tabasco' },
+  ];
+  
   return (
-    <div className="w-52 h-[790px] left-[65px] top-[88px] absolute">
-      <div className="w-52 h-[790px] left-0 top-0 absolute bg-white/20 rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)]" />
+    <div className="w-52 h-[790px] left-[65px] top-[88px] absolute z-10">
+      <div className="w-52 h-[790px] left-0 top-0 absolute bg-white/20 backdrop-blur-sm rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)]" />
       
-      {/* Header */}
-      <div className="w-48 h-9 left-[7px] top-[7px] absolute bg-kai-blue rounded-[10px] shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)]" />
-      <div className="left-[21px] top-[15px] absolute justify-start text-white text-base font-bold font-['Nunito_Sans']">Super Sanchez</div>
+      {/* Header - Super Sanchez */}
+      <Link href="/super-sanchez">
+        <div className={`w-48 h-9 left-[7px] top-[7px] absolute rounded-[10px] shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)] cursor-pointer transition-colors ${
+          isActive('/super-sanchez') ? 'bg-kai-blue' : 'bg-kai-blue/80 hover:bg-kai-blue'
+        }`} />
+      </Link>
+      <Link href="/super-sanchez">
+        <div className={`left-[21px] top-[15px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer ${
+          isActive('/super-sanchez') ? 'text-white' : 'text-white/90'
+        }`}>Super Sanchez</div>
+      </Link>
       <div className="w-36 h-16 left-[37px] top-[45px] absolute opacity-90 justify-start text-neutral-900/80 text-base font-light font-['Nunito_Sans'] leading-8">
         Editar Agente<br/>Tools<br/>Enviar recordatorios
       </div>
@@ -18,12 +45,41 @@ export default function Sidebar() {
       <div className="w-[3px] h-20 left-[24px] top-[51px] absolute bg-blue-900/20 rounded-[10px]" />
       
       {/* Agent List */}
-      <div className="left-[21px] top-[144px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">Pereyra</div>
-      <div className="w-28 left-[21px] top-[186px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">Bimo</div>
-      <div className="w-28 left-[21px] top-[228px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">Ventanito</div>
-      <div className="w-14 left-[21px] top-[270px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">Shuster</div>
-      <div className="w-9 left-[21px] top-[312px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">ADO</div>
-      <div className="w-28 left-[21px] top-[354px] absolute justify-start text-black/80 text-base font-bold font-['Nunito_Sans']">Feria Tabasco</div>
+      <Link href="/pereyra">
+        <div className={`left-[21px] top-[144px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/pereyra') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>Pereyra</div>
+      </Link>
+      
+      <Link href="/bimo">
+        <div className={`w-28 left-[21px] top-[186px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/bimo') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>Bimo</div>
+      </Link>
+      
+      <Link href="/ventanito">
+        <div className={`w-28 left-[21px] top-[228px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/ventanito') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>Ventanito</div>
+      </Link>
+      
+      <Link href="/shuster">
+        <div className={`w-14 left-[21px] top-[270px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/shuster') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>Shuster</div>
+      </Link>
+      
+      <Link href="/ado">
+        <div className={`w-9 left-[21px] top-[312px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/ado') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>ADO</div>
+      </Link>
+      
+      <Link href="/feria-tabasco">
+        <div className={`w-28 left-[21px] top-[354px] absolute justify-start text-base font-bold font-['Nunito_Sans'] cursor-pointer transition-colors ${
+          isActive('/feria-tabasco') ? 'text-kai-blue' : 'text-black/80 hover:text-kai-blue'
+        }`}>Feria Tabasco</div>
+      </Link>
       
       {/* Agent Arrows - Down (rotated 180deg) */}
       <div className="absolute left-[178px] top-[148px] rotate-180">

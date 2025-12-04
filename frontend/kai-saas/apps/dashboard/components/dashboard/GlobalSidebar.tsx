@@ -6,7 +6,20 @@ import { usePathname } from 'next/navigation';
 export default function GlobalSidebar() {
   const pathname = usePathname();
   
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/') {
+      // Para el dashboard, consideramos activo si estamos en / o en cualquier sub-ruta del dashboard
+      return pathname === '/' || 
+             pathname.startsWith('/super-sanchez') ||
+             pathname.startsWith('/pereyra') ||
+             pathname.startsWith('/bimo') ||
+             pathname.startsWith('/ventanito') ||
+             pathname.startsWith('/shuster') ||
+             pathname.startsWith('/ado') ||
+             pathname.startsWith('/feria-tabasco');
+    }
+    return pathname === path;
+  };
   
   return (
     <div className="w-14 h-screen fixed left-0 top-0 flex flex-col items-center pt-[88px] gap-[10px] bg-transparent z-50">
