@@ -19,7 +19,7 @@ export default function TopBar() {
   };
   
   return (
-    <div className="w-[1310px] h-24 left-[65px] top-[-22px] absolute z-10">
+    <div className="w-[1310px] h-24 left-[65px] top-[-22px] absolute z-20">
       <div className="w-52 h-24 left-0 top-0 absolute bg-[#00188A] rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)]" />
       <div className="absolute left-[344px] top-[77px] rotate-90">
         <svg width="9" height="6" viewBox="0 0 9 6" fill="none">

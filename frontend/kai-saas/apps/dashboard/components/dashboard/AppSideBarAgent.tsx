@@ -50,9 +50,9 @@ export function AppSidebar() {
   return (
     <Sidebar 
       collapsible="none"
-      className="fixed left-[65px] top-[88px] w-52 h-[790px] border-0 bg-transparent"
+      className="fixed left-[65px] top-[88px] w-52 h-[calc(100vh-104px)] border-0 bg-transparent z-10"
     >
-      <SidebarContent className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)] p-2">
+      <SidebarContent className="bg-white/20 backdrop-blur-sm rounded-2xl shadow-[0px_4px_20px_0px_rgba(0,0,0,0.08)] p-2 h-full relative">
         <SidebarGroup className="p-0">
           <SidebarGroupContent>
             <SidebarMenu>
@@ -121,19 +121,19 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-      </SidebarContent>
-
-      {/* QR Section */}
-      <SidebarFooter className="absolute bottom-4 left-2 right-2 p-0">
-        <div className="bg-gradient-to-b from-amber-200/30 to-white/30 rounded-[10px] shadow-[0px_0px_20px_0px_rgba(1,0,245,0.10)] p-4">
-          <div className="flex flex-col items-center">
-            <img className="w-28 h-28 rounded-2xl mb-3" src="/qr.png" alt="QR Code" />
-            <p className="text-center text-neutral-800 text-base font-normal font-['Nunito_Sans'] leading-4">
-              Escanea y genera tu Agente desde WhatsApp
-            </p>
+        
+        {/* QR Section - Posición absoluta en la parte inferior */}
+        <div className="absolute bottom-2 left-2 right-2">
+          <div className="bg-gradient-to-b from-amber-200/30 to-white/30 rounded-[10px] shadow-[0px_0px_20px_0px_rgba(1,0,245,0.10)] p-4">
+            <div className="flex flex-col items-center">
+              <img className="w-28 h-28 rounded-2xl mb-3" src="/qr.png" alt="QR Code" />
+              <p className="text-center text-neutral-800 text-base font-normal font-['Nunito_Sans'] leading-4">
+                Escanea y genera tu Agente desde WhatsApp
+              </p>
+            </div>
           </div>
         </div>
-      </SidebarFooter>
+      </SidebarContent>
     </Sidebar>
   );
 }

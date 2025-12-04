@@ -15,15 +15,15 @@ export default function DashboardLayout({
       {/* Global Sidebar - Fixed left */}
       <GlobalSidebar />
       
+      {/* Top Bar */}
+      <TopBar />
+      
       <SidebarProvider defaultOpen>
-        {/* Agent Sidebar - Positioned after GlobalSidebar */}
+        {/* Agent Sidebar */}
         <AppSidebar />
         
-        {/* Top Bar */}
-        <TopBar />
-        
-        {/* Main Content */}
-        <main className="absolute left-[280px] top-[88px] right-0 bottom-0 overflow-auto">
+        {/* Main Content - Responsive */}
+        <main className="ml-[280px] mt-[88px] mr-4 mb-4 overflow-auto h-[calc(100vh-104px)]">
           {children}
         </main>
       </SidebarProvider>
