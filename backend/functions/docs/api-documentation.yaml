@@ -2,19 +2,25 @@ openapi: 3.0.0
 info:
   title: KAI-SAAS Agent Management API
   description: |
-    API para gestión de agentes de IA en el panel de administración.
+    API para gestión de agentes de IA y autenticación de usuarios en el panel de administración.
     
     ## Autenticación
-    Actualmente las APIs son públicas. En producción se recomienda usar Firebase Authentication.
+    Las APIs de autenticación utilizan Firebase Auth con tokens JWT Bearer.
+    
+    **Flujo:**
+    1. Login → Obtener token JWT
+    2. Usar token en header `Authorization: Bearer <token>` para APIs protegidas
+    3. Token expira en 1 hora
     
     ## Base URL
     `https://us-central1-asistente-comercial-8d43c.cloudfunctions.net`
     
     ## Seguridad
-    - Todas las APIs validan que el agente pertenezca al usuario
+    - APIs protegidas requieren token JWT válido
+    - Validación de que el agente pertenezca al usuario
     - Modo test disponible con `userId=testid` para desarrollo
     
-  version: 1.0.0
+  version: 2.0.0
   contact:
     name: API Support
     email: desgarcia2112@gmail.com
@@ -24,12 +30,328 @@ servers:
     description: Production server
 
 tags:
+  - name: Authentication
+    description: Operaciones de autenticación y gestión de usuarios
   - name: Agents
     description: Operaciones relacionadas con agentes
   - name: Collections
     description: Operaciones sobre colecciones de agentes
 
 paths:
+  # ============================================================================
+  # AUTHENTICATION APIS
+  # ============================================================================
+  
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Login de usuario
+      description: |
+        Autentica un usuario con email y password.
+        Retorna un token JWT que debe usarse en las demás APIs protegidas.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email del usuario
+                password:
+                  type: string
+                  format: password
+                  description: Contraseña del usuario
+              required:
+                - email
+                - password
+            example:
+              email: usuario@example.com
+              password: password123
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Login successful
+                      user:
+                        $ref: '#/components/schemas/User'
+                      token:
+                        type: string
+                        description: JWT token para autenticación
+                        example: eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...
+                      refreshToken:
+                        type: string
+                        description: Token para refrescar el JWT
+                      expiresIn:
+                        type: string
+                        description: Tiempo de expiración en segundos
+                        example: "3600"
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /getUserProfile:
+    get:
+      tags:
+        - Authentication
+      summary: Obtener perfil del usuario autenticado
+      description: Retorna el perfil completo del usuario autenticado
+      operationId: getUserProfile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Perfil obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    allOf:
+                      - $ref: '#/components/schemas/User'
+                      - type: object
+                        properties:
+                          createdAt:
+                            type: string
+                            format: date-time
+                          lastSignIn:
+                            type: string
+                            format: date-time
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /updatePassword:
+    post:
+      tags:
+        - Authentication
+      summary: Actualizar contraseña
+      description: Cambia la contraseña del usuario autenticado
+      operationId: updatePassword
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPassword:
+                  type: string
+                  format: password
+                  minLength: 6
+                  description: Nueva contraseña (mínimo 6 caracteres)
+              required:
+                - newPassword
+            example:
+              newPassword: nuevaPassword123
+      responses:
+        '200':
+          description: Contraseña actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Password updated successfully
+                      uid:
+                        type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /updateEmail:
+    post:
+      tags:
+        - Authentication
+      summary: Actualizar email
+      description: |
+        Cambia el email del usuario autenticado.
+        El nuevo email se marca como no verificado.
+      operationId: updateEmail
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newEmail:
+                  type: string
+                  format: email
+                  description: Nuevo email
+              required:
+                - newEmail
+            example:
+              newEmail: nuevo@email.com
+      responses:
+        '200':
+          description: Email actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Email updated successfully. Please verify your new email.
+                      uid:
+                        type: string
+                      newEmail:
+                        type: string
+                        format: email
+                      emailVerified:
+                        type: boolean
+                        example: false
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          description: Email inválido o ya en uso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                emailInUse:
+                  summary: Email ya en uso
+                  value:
+                    success: false
+                    error:
+                      message: Email already in use
+                      code: 400
+                invalidFormat:
+                  summary: Formato inválido
+                  value:
+                    success: false
+                    error:
+                      message: Validation failed
+                      code: 400
+                      validationErrors:
+                        - field: newEmail
+                          message: Invalid email format
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /updateProfile:
+    put:
+      tags:
+        - Authentication
+      summary: Actualizar perfil de usuario
+      description: |
+        Actualiza datos del perfil del usuario (nombre, foto, teléfono).
+        NO actualiza email ni password (usar APIs específicas).
+      operationId: updateProfile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: Nombre del usuario
+                photoURL:
+                  type: string
+                  format: uri
+                  description: URL de la foto de perfil
+                phoneNumber:
+                  type: string
+                  description: Número de teléfono
+              example:
+                displayName: Juan Pérez
+                photoURL: https://example.com/photo.jpg
+                phoneNumber: "+1234567890"
+      responses:
+        '200':
+          description: Perfil actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    allOf:
+                      - $ref: '#/components/schemas/User'
+                      - type: object
+                        properties:
+                          updatedAt:
+                            type: string
+                            format: date-time
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # ============================================================================
+  # AGENT MANAGEMENT APIS
+  # ============================================================================
+  
+
   /getAgentsByUserId:
     get:
       tags:
@@ -302,7 +624,42 @@ paths:
           $ref: '#/components/responses/InternalError'
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Token JWT obtenido del endpoint /login
+  
   schemas:
+    User:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: ID único del usuario
+          example: abc123xyz...
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: usuario@example.com
+        displayName:
+          type: string
+          description: Nombre del usuario
+          example: Juan Pérez
+        photoURL:
+          type: string
+          format: uri
+          description: URL de la foto de perfil
+        phoneNumber:
+          type: string
+          description: Número de teléfono
+        emailVerified:
+          type: boolean
+          description: Si el email está verificado
+          example: true
+    
     Agent:
       type: object
       properties:
@@ -331,8 +688,89 @@ components:
           format: date-time
           description: Última actualización
       additionalProperties: true
+    
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            code:
+              type: integer
+        timestamp:
+          type: string
+          format: date-time
 
   responses:
+    Unauthorized:
+      description: No autorizado - Token inválido, expirado o no proporcionado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            noToken:
+              summary: Token no proporcionado
+              value:
+                success: false
+                error:
+                  message: No authorization token provided
+                  code: 401
+                timestamp: "2025-12-04T16:00:00.000Z"
+            invalidToken:
+              summary: Token inválido
+              value:
+                success: false
+                error:
+                  message: Invalid token format
+                  code: 401
+                timestamp: "2025-12-04T16:00:00.000Z"
+            expiredToken:
+              summary: Token expirado
+              value:
+                success: false
+                error:
+                  message: Token expired
+                  code: 401
+                timestamp: "2025-12-04T16:00:00.000Z"
+    
+    ValidationError:
+      description: Error de validación
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              error:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Validation failed
+                  code:
+                    type: integer
+                    example: 400
+                  validationErrors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                        message:
+                          type: string
+              timestamp:
+                type: string
+                format: date-time
+    
     BadRequest:
       description: Petición inválida - Parámetros faltantes o incorrectos
       content:

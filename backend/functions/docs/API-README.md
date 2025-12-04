@@ -12,13 +12,217 @@ https://us-central1-asistente-comercial-8d43c.cloudfunctions.net
 
 ## 🔑 Autenticación
 
-Actualmente las APIs son **públicas** (requieren `allUsers` permission en Firebase).
+Las APIs de autenticación utilizan **Firebase Auth** con tokens JWT Bearer.
 
-> ⚠️ **Para producción:** Se recomienda implementar Firebase Authentication con tokens Bearer.
+### Flujo de Autenticación
+
+1. **Login** → Obtener token JWT
+2. **Usar token** en header `Authorization: Bearer <token>` para APIs protegidas
+3. **Token expira** en 1 hora → Hacer login de nuevo o usar refresh token
 
 ---
 
 ## 📋 APIs Disponibles
+
+### 🔐 Authentication APIs
+
+#### 1. **Login**
+
+Autentica un usuario y retorna un token JWT.
+
+**Endpoint:** `POST /login`
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "email": "usuario@example.com",
+  "password": "password123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Login successful",
+    "user": {
+      "uid": "abc123...",
+      "email": "usuario@example.com",
+      "displayName": "Usuario Test",
+      "emailVerified": true
+    },
+    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...",
+    "refreshToken": "AOEOulZ...",
+    "expiresIn": "3600"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+**Errores:**
+- `401` - Email o contraseña incorrectos
+- `400` - Email o password faltantes
+- `500` - Error de configuración del servidor
+
+---
+
+#### 2. **Get User Profile** 🔒
+
+Obtiene el perfil del usuario autenticado.
+
+**Endpoint:** `GET /getUserProfile`
+
+**Headers:**
+```
+Authorization: Bearer <token>
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "uid": "abc123...",
+    "email": "usuario@example.com",
+    "emailVerified": true,
+    "displayName": "Usuario Test",
+    "photoURL": "https://...",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "lastSignIn": "2025-12-04T16:00:00.000Z"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+**Errores:**
+- `401` - Token inválido o expirado
+- `401` - No se proporcionó token
+
+---
+
+#### 3. **Update Password** 🔒
+
+Cambia la contraseña del usuario autenticado.
+
+**Endpoint:** `POST /updatePassword`
+
+**Headers:**
+```
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "newPassword": "nuevaPassword123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Password updated successfully",
+    "uid": "abc123..."
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+**Errores:**
+- `400` - Contraseña muy corta (mínimo 6 caracteres)
+- `401` - Token inválido
+
+---
+
+#### 4. **Update Email** 🔒
+
+Cambia el email del usuario autenticado.
+
+**Endpoint:** `POST /updateEmail`
+
+**Headers:**
+```
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "newEmail": "nuevo@email.com"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Email updated successfully. Please verify your new email.",
+    "uid": "abc123...",
+    "newEmail": "nuevo@email.com",
+    "emailVerified": false
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+**Errores:**
+- `400` - Email ya en uso
+- `400` - Formato de email inválido
+- `401` - Token inválido
+
+---
+
+#### 5. **Update Profile** 🔒
+
+Actualiza datos del perfil del usuario.
+
+**Endpoint:** `PUT /updateProfile`
+
+**Headers:**
+```
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+**Body:**
+```json
+{
+  "displayName": "Nuevo Nombre",
+  "photoURL": "https://example.com/photo.jpg",
+  "phoneNumber": "+1234567890"
+}
+```
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "uid": "abc123...",
+    "email": "usuario@example.com",
+    "displayName": "Nuevo Nombre",
+    "photoURL": "https://example.com/photo.jpg",
+    "phoneNumber": "+1234567890",
+    "updatedAt": "2025-12-04T16:00:00.000Z"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+---
+
+### 🤖 Agent Management APIs
 
 ### 1. **Get Agents By User ID**
 
@@ -221,16 +425,39 @@ Actualiza los campos de un agente.
 | Código | Descripción |
 |--------|-------------|
 | `400` | Bad Request - Parámetros faltantes o inválidos |
+| `401` | Unauthorized - Token inválido, expirado o no proporcionado |
 | `403` | Forbidden - Acceso denegado (el agente no pertenece al usuario) |
 | `404` | Not Found - Recurso no encontrado |
+| `405` | Method Not Allowed - Método HTTP no permitido |
 | `500` | Internal Server Error - Error del servidor |
 
 **Formato de error:**
 ```json
 {
   "success": false,
-  "error": "Mensaje de error descriptivo",
-  "details": "Detalles técnicos (solo en errores 500)"
+  "error": {
+    "message": "Mensaje de error descriptivo",
+    "code": 401
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}
+```
+
+**Errores de validación:**
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Validation failed",
+    "code": 400,
+    "validationErrors": [
+      {
+        "field": "newPassword",
+        "message": "Password must be at least 6 characters"
+      }
+    ]
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
 }
 ```
 
@@ -374,23 +601,35 @@ function useAgentCollection(userId: string, agentId: string, collectionName: str
 
 ## 📝 Notas para Producción
 
-1. **Implementar Firebase Authentication**
-   - Agregar validación de tokens Bearer
-   - Verificar que el userId del token coincida con el de la petición
+1. **✅ Firebase Authentication Implementada**
+   - Login con email/password
+   - Tokens JWT con expiración de 1 hora
+   - Middleware de autenticación en APIs protegidas
 
-2. **Eliminar modo test**
-   - Remover la condición `userId === "testid"`
+2. **Configurar API Key**
+   - Ejecutar: `firebase functions:config:set auth.apikey="TU_WEB_API_KEY"`
+   - Obtener de Firebase Console → Project Settings → Web API Key
 
-3. **Rate Limiting**
-   - Considerar implementar límites de requests por usuario
+3. **Eliminar modo test**
+   - Remover la condición `userId === "testid"` en `getCollectionByAgentId`
 
 4. **CORS restrictivo**
-   - Limitar origins permitidos a tu dominio específico
+   - Actualizar `ALLOWED_ORIGINS` en `.env.production`
+   - Limitar a tu dominio específico en producción
 
-5. **Logging y Monitoring**
+5. **Rate Limiting**
+   - Considerar implementar límites de requests por usuario
+   - Firebase Functions tiene límites por defecto
+
+6. **Logging y Monitoring**
    - Configurar alertas en Firebase Console
-   - Monitorear errores 403 y 500
+   - Monitorear errores 401, 403 y 500
+   - Revisar logs de login fallidos
+
+7. **Verificación de Email**
+   - Configurar plantillas de email en Firebase Console
+   - Personalizar con tu branding
 
 ---
 
-**Última actualización:** 2025-12-01
+**Última actualización:** 2025-12-04

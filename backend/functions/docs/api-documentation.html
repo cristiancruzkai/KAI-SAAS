@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAI-SAAS API Documentation</title>
+    <title>KAI-SAAS API Documentation v2.0</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -12,7 +12,8 @@
     <div class="container">
         <header>
             <h1>📚 KAI-SAAS API Documentation</h1>
-            <p>Cloud Functions para gestión de agentes de IA</p>
+            <p>Cloud Functions para gestión de agentes de IA y autenticación de usuarios</p>
+            <p style="color: #666; font-size: 0.9em;">Versión 2.0 - Actualizado: 2025-12-04</p>
         </header>
 
         <div class="base-url">
@@ -21,14 +22,299 @@
         </div>
 
         <div class="security-note">
-            <strong>⚠️ Modo de Desarrollo:</strong> Las APIs actualmente son públicas. Para producción se recomienda
-            implementar Firebase Authentication con tokens Bearer.
+            <strong>🔐 Autenticación:</strong> Las APIs protegidas requieren un token JWT Bearer obtenido del endpoint
+            <code>/login</code>.
+            <br><br>
+            <strong>Flujo:</strong>
+            <ol style="margin: 10px 0; padding-left: 20px;">
+                <li>Hacer login con <code>POST /login</code></li>
+                <li>Obtener el token JWT de la respuesta</li>
+                <li>Usar el token en el header: <code>Authorization: Bearer &lt;token&gt;</code></li>
+            </ol>
         </div>
 
         <div class="controls">
             <button class="expand-all-btn" onclick="toggleAll(false)">📖 Expandir Todas</button>
             <button class="expand-all-btn" onclick="toggleAll(true)">📕 Colapsar Todas</button>
         </div>
+
+        <!-- ============================================================================ -->
+        <!-- AUTHENTICATION APIS -->
+        <!-- ============================================================================ -->
+
+        <h2
+            style="margin-top: 40px; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px;">
+            🔐 Authentication APIs
+        </h2>
+
+        <!-- LOGIN -->
+        <div class="endpoint collapsed" id="endpoint-auth-1">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-auth-1')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method post">POST</span>
+                    <h2 class="endpoint-title">/login</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Autentica un usuario con email y password. Retorna un token JWT que debe usarse en las demás APIs
+                    protegidas.
+                </p>
+
+                <h3>Request Body (JSON)</h3>
+                <div class="code-block">
+                    <pre>{
+  "email": "usuario@example.com",
+  "password": "password123"
+}</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Login exitoso</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "message": "Login successful",
+    "user": {
+      "uid": "abc123...",
+      "email": "usuario@example.com",
+      "displayName": "Usuario Test",
+      "emailVerified": true
+    },
+    "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...",
+    "refreshToken": "AOEOulZ...",
+    "expiresIn": "3600"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge error">401 Unauthorized</span> Credenciales inválidas</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": false,
+  "error": {
+    "message": "Invalid email or password",
+    "code": 401
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET USER PROFILE -->
+        <div class="endpoint collapsed" id="endpoint-auth-2">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-auth-2')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method get">GET</span>
+                    <h2 class="endpoint-title">/getUserProfile 🔒</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Obtiene el perfil completo del usuario autenticado.
+                </p>
+
+                <div class="security-note">
+                    <strong>🔒 Requiere autenticación:</strong> Incluir header
+                    <code>Authorization: Bearer &lt;token&gt;</code>
+                </div>
+
+                <h3>Headers</h3>
+                <div class="code-block">
+                    <pre>Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Perfil obtenido</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "uid": "abc123...",
+    "email": "usuario@example.com",
+    "emailVerified": true,
+    "displayName": "Usuario Test",
+    "photoURL": "https://...",
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "lastSignIn": "2025-12-04T16:00:00.000Z"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPDATE PASSWORD -->
+        <div class="endpoint collapsed" id="endpoint-auth-3">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-auth-3')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method post">POST</span>
+                    <h2 class="endpoint-title">/updatePassword 🔒</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Cambia la contraseña del usuario autenticado.
+                </p>
+
+                <div class="security-note">
+                    <strong>🔒 Requiere autenticación:</strong> Incluir header
+                    <code>Authorization: Bearer &lt;token&gt;</code>
+                </div>
+
+                <h3>Request Body (JSON)</h3>
+                <div class="code-block">
+                    <pre>{
+  "newPassword": "nuevaPassword123"
+}</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Contraseña actualizada</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "message": "Password updated successfully",
+    "uid": "abc123..."
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge error">400 Bad Request</span> Validación fallida</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": false,
+  "error": {
+    "message": "Validation failed",
+    "code": 400,
+    "validationErrors": [
+      {
+        "field": "newPassword",
+        "message": "Password must be at least 6 characters"
+      }
+    ]
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPDATE EMAIL -->
+        <div class="endpoint collapsed" id="endpoint-auth-4">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-auth-4')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method post">POST</span>
+                    <h2 class="endpoint-title">/updateEmail 🔒</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Cambia el email del usuario autenticado. El nuevo email se marca como no verificado.
+                </p>
+
+                <div class="security-note">
+                    <strong>🔒 Requiere autenticación:</strong> Incluir header
+                    <code>Authorization: Bearer &lt;token&gt;</code>
+                </div>
+
+                <h3>Request Body (JSON)</h3>
+                <div class="code-block">
+                    <pre>{
+  "newEmail": "nuevo@email.com"
+}</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Email actualizado</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "message": "Email updated successfully. Please verify your new email.",
+    "uid": "abc123...",
+    "newEmail": "nuevo@email.com",
+    "emailVerified": false
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPDATE PROFILE -->
+        <div class="endpoint collapsed" id="endpoint-auth-5">
+            <div class="endpoint-header" onclick="toggleEndpoint('endpoint-auth-5')">
+                <span class="collapse-icon">▼</span>
+                <div class="endpoint-header-content">
+                    <span class="method put">PUT</span>
+                    <h2 class="endpoint-title">/updateProfile 🔒</h2>
+                </div>
+            </div>
+            <div class="endpoint-content">
+                <p class="description">
+                    Actualiza datos del perfil del usuario (nombre, foto, teléfono). NO actualiza email ni password.
+                </p>
+
+                <div class="security-note">
+                    <strong>🔒 Requiere autenticación:</strong> Incluir header
+                    <code>Authorization: Bearer &lt;token&gt;</code>
+                </div>
+
+                <h3>Request Body (JSON)</h3>
+                <div class="code-block">
+                    <pre>{
+  "displayName": "Nuevo Nombre",
+  "photoURL": "https://example.com/photo.jpg",
+  "phoneNumber": "+1234567890"
+}</pre>
+                </div>
+
+                <div class="response-example">
+                    <h4><span class="badge success">200 OK</span> Perfil actualizado</h4>
+                    <div class="code-block">
+                        <pre>{
+  "success": true,
+  "data": {
+    "uid": "abc123...",
+    "email": "usuario@example.com",
+    "displayName": "Nuevo Nombre",
+    "photoURL": "https://example.com/photo.jpg",
+    "phoneNumber": "+1234567890",
+    "updatedAt": "2025-12-04T16:00:00.000Z"
+  },
+  "timestamp": "2025-12-04T16:00:00.000Z"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================================ -->
+        <!-- AGENT MANAGEMENT APIS -->
+        <!-- ============================================================================ -->
+
+        <h2
+            style="margin-top: 40px; padding: 15px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 8px;">
+            🤖 Agent Management APIs
+        </h2>
 
         <!-- GET AGENTS BY USER ID -->
         <div class="endpoint collapsed" id="endpoint-1">
@@ -299,7 +585,7 @@
         </div>
 
         <footer>
-            <p>📝 Última actualización: 2025-12-01</p>
+            <p>📝 Última actualización: 2025-12-04</p>
             <p>Para más información, consulta <code>docs/API-README.md</code> o <code>docs/api-documentation.yaml</code>
             </p>
         </footer>
@@ -326,7 +612,7 @@
 
         // Expand first endpoint by default on load
         window.addEventListener('DOMContentLoaded', () => {
-            const firstEndpoint = document.getElementById('endpoint-1');
+            const firstEndpoint = document.getElementById('endpoint-auth-1');
             if (firstEndpoint) {
                 firstEndpoint.classList.remove('collapsed');
             }
