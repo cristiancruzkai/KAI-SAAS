@@ -1,6 +1,23 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { KaiLogo } from '../ui/KaiLogo';
 
 export default function TopBar() {
+  const pathname = usePathname();
+  
+  // Mapeo de rutas a nombres de agentes
+  const getAgentName = () => {
+    if (pathname.startsWith('/super-sanchez')) return 'Super Sanchez';
+    if (pathname.startsWith('/pereyra')) return 'Pereyra';
+    if (pathname.startsWith('/bimo')) return 'Bimo';
+    if (pathname.startsWith('/ventanito')) return 'Ventanito';
+    if (pathname.startsWith('/shuster')) return 'Shuster';
+    if (pathname.startsWith('/ado')) return 'ADO';
+    if (pathname.startsWith('/feria-tabasco')) return 'Feria Tabasco';
+    return 'Super Sanchez'; // Default
+  };
+  
   return (
     <div className="w-[1310px] h-24 left-[65px] top-[-22px] absolute z-10">
       <div className="w-52 h-24 left-0 top-0 absolute bg-[#00188A] rounded-3xl shadow-[inset_0px_0px_9px_1px_rgba(255,255,255,0.44)]" />
@@ -10,7 +27,7 @@ export default function TopBar() {
         </svg>
       </div>
       <div className="left-[248px] top-[70px] absolute justify-start text-slate-900 text-sm font-bold font-['Nunito_Sans']">Tus Agentes</div>
-      <div className="left-[362px] top-[70px] absolute justify-start text-slate-900 text-sm font-bold font-['Nunito_Sans']">Dashboard Bimo</div>
+      <div className="left-[362px] top-[70px] absolute justify-start text-slate-900 text-sm font-bold font-['Nunito_Sans']">Dashboard {getAgentName()}</div>
       
       {/* Logo */}
       <div className="absolute left-[48px] top-[52px]">
