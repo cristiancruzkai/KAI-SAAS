@@ -11,7 +11,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full h-screen bg-gradient-to-b from-stone-50 to-indigo-100 overflow-hidden">
+    <div className="w-full min-h-screen bg-gradient-to-b from-stone-50 to-indigo-100 bg-fixed">
       {/* Global Sidebar - Fixed left */}
       <GlobalSidebar />
       
@@ -22,8 +22,8 @@ export default function DashboardLayout({
         {/* Agent Sidebar */}
         <AppSidebar />
         
-        {/* Main Content - Responsive */}
-        <main className="ml-[280px] mt-[88px] mr-4 mb-4 overflow-auto h-[calc(100vh-104px)]">
+        {/* Main Content - Responsive with relative positioning for absolute children */}
+        <main className="ml-[280px] mt-[88px] mr-4 mb-4 relative min-h-[1200px]">
           {children}
         </main>
       </SidebarProvider>

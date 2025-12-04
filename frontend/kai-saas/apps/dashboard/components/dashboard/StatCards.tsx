@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface StatCardProps {
   title: string;
   imageSrc: string;
@@ -8,11 +10,14 @@ function StatCard({ title, imageSrc, left }: StatCardProps) {
   return (
     <>
   
-      <img 
+      <Image 
         src={imageSrc} 
-        className={`w-auto h-28 ${left} top-[295px] absolute rounded-2xl`} 
+        alt=""
+        width={200}
+        height={112}
+        className={`w-auto h-28 ${left} top-[295px] absolute rounded-2xl z-10`} 
       />
-      <div className={`${left === "left-[286px]" ? "left-[313px]" : left === "left-[654px]" ? "left-[678px]" : "left-[1045px]"} top-[328px] absolute justify-center text-white text-lg font-semibold font-['Nunito_Sans'] leading-5`}>
+      <div className={`${left === "left-[286px]" ? "left-[313px]" : left === "left-[654px]" ? "left-[678px]" : "left-[1045px]"} top-[328px] absolute justify-center text-white text-lg font-semibold font-['Nunito_Sans'] leading-5 z-20`}>
         {title.split(' ').map((word, i) => (
           <span key={i}>
             {word}

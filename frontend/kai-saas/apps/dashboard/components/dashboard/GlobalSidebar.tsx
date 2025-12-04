@@ -22,7 +22,7 @@ export default function GlobalSidebar() {
   };
   
   return (
-    <div className="w-14 h-screen fixed left-0 top-0 flex flex-col items-center pt-[88px] gap-[10px] bg-transparent z-50">
+    <div className="w-14 h-screen fixed left-0 top-22 flex flex-col items-center pt-[88px] gap-[10px] bg-transparent z-50">
       {/* Bot Icon - Highlighted - Dashboard */}
       <Link href="/">
         <div className={`relative w-14 h-11 rounded-tr-2xl rounded-br-2xl flex items-center justify-center transition-all ${
