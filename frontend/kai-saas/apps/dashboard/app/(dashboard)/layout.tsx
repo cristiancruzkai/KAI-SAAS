@@ -1,7 +1,9 @@
 'use client';
 
-import Sidebar from '../../components/dashboard/Sidebar';
-import TopBar from '../../components/dashboard/TopBar';
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/dashboard/AppSideBarAgent"
+import TopBar from "@/components/dashboard/TopBar";
+import GlobalSidebar from "@/components/dashboard/GlobalSidebar";
 
 export default function DashboardLayout({
   children,
@@ -10,16 +12,21 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="w-full h-screen bg-gradient-to-b from-stone-50 to-indigo-100 overflow-hidden">
-      <div className="relative w-full h-full">
-        {/* Top Navigation Bar */}
+      {/* Global Sidebar - Fixed left */}
+      <GlobalSidebar />
+      
+      <SidebarProvider defaultOpen>
+        {/* Agent Sidebar - Positioned after GlobalSidebar */}
+        <AppSidebar />
+        
+        {/* Top Bar */}
         <TopBar />
         
-        {/* Left Sidebar with Agents */}
-        <Sidebar />
-        
-        {/* Content area */}
-        {children}
-      </div>
+        {/* Main Content */}
+        <main className="absolute left-[280px] top-[88px] right-0 bottom-0 overflow-auto">
+          {children}
+        </main>
+      </SidebarProvider>
     </div>
   );
 }
