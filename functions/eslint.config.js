@@ -1,29 +1,21 @@
-import globals from 'globals';
-import js from '@eslint/js';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
+const eslint = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const perfectionist = require("eslint-plugin-perfectionist");
 
-export default [
-  js.configs.recommended,
+module.exports = [
+  {
+    ignores: ["**/*.js"],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   {
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.es2024,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: __dirname,
       },
-      sourceType: 'module',
-      ecmaVersion: 'latest',
     },
   },
-  {
-    rules: {
-      'no-console': 'warn',
-      'no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-        },
-      ],
-    },
-  },
-  prettierRecommended,
+  perfectionist.configs["recommended-natural"],
 ];
