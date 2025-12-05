@@ -2,13 +2,13 @@ const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const perfectionist = require("eslint-plugin-perfectionist");
 
-module.exports = tseslint.config(
+module.exports = [
   {
     ignores: ["**/*.js"],
   },
   eslint.configs.recommended,
-  tseslint.configs.strictTypeChecked,
-  tseslint.configs.stylisticTypeChecked,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   {
     languageOptions: {
       parserOptions: {
@@ -18,4 +18,4 @@ module.exports = tseslint.config(
     },
   },
   perfectionist.configs["recommended-natural"],
-);
+];
