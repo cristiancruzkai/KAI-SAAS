@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/arturoardura/Desktop/codigoPruebas/kaiSASS/KAI-SAAS/app/apps/dashboard/app/page.tsx"],"sourcesContent":["'use client';\n\nimport { useEffect } from 'react';\nimport { useRouter } from 'next/navigation';\n\nexport default function RootPage() {\n  const router = useRouter();\n  \n  useEffect(() => {\n    router.push('/super-sanchez');\n  }, [router]);\n  \n  return null;\n}\n"],"names":[],"mappings":";;;;AAEA;AACA;;AAHA;;;AAKe,SAAS;;IACtB,MAAM,SAAS,IAAA,iRAAS;IAExB,IAAA,ySAAS;8BAAC;YACR,OAAO,IAAI,CAAC;QACd;6BAAG;QAAC;KAAO;IAEX,OAAO;AACT;GARwB;;QACP,iRAAS;;;KADF","debugId":null}}]
+}
