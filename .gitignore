@@ -70,3 +70,15 @@ node_modules/
 
 # MacOS files
 .DS_Store
+
+# Next.js
+.next/
+out/
+build/
+
+# Turbo
+.turbo/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
