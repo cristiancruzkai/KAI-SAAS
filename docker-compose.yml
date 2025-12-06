@@ -1,0 +1,58 @@
+services:
+  dashboard:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: kai-saas-dashboard
+    ports:
+      - "3002:3002"
+    volumes:
+      # Montar código fuente para hot-reload en desarrollo
+      - ./app:/app
+      # Excluir node_modules del host
+      - /app/node_modules
+      - /app/apps/dashboard/node_modules
+      - /app/apps/docs/node_modules
+      - /app/apps/web/node_modules
+    environment:
+      - NODE_ENV=development
+    command: pnpm dev --filter dashboard
+    restart: unless-stopped
+
+  # Opcional: Web landing page
+  web:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: kai-saas-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+      - /app/apps/dashboard/node_modules
+      - /app/apps/docs/node_modules
+      - /app/apps/web/node_modules
+    environment:
+      - NODE_ENV=development
+    command: pnpm dev --filter web
+    restart: unless-stopped
+
+  # Opcional: Docs
+  docs:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: kai-saas-docs
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+      - /app/apps/dashboard/node_modules
+      - /app/apps/docs/node_modules
+      - /app/apps/web/node_modules
+    environment:
+      - NODE_ENV=development
+    command: pnpm dev --filter docs
+    restart: unless-stopped
