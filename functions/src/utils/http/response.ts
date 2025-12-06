@@ -3,8 +3,8 @@
  * Estandariza las respuestas de las APIs
  */
 
-import type { Response } from 'express';
-import type { ApiResponse, ValidationError } from '../../types/index.js';
+import type { Response } from "express";
+import type { ApiResponse, ValidationError } from "../../types/index.js";
 
 /**
  * Respuesta exitosa
@@ -12,7 +12,7 @@ import type { ApiResponse, ValidationError } from '../../types/index.js';
 export const success = <T = any>(
   res: Response,
   data: T,
-  statusCode: number = 200
+  statusCode: number = 200,
 ): any => {
   const response: ApiResponse<T> = {
     success: true,
@@ -30,7 +30,7 @@ export const error = (
   res: Response,
   message: string,
   statusCode: number = 500,
-  details: string | null = null
+  details: string | null = null,
 ): any => {
   const response: ApiResponse = {
     success: false,
@@ -50,12 +50,12 @@ export const error = (
  */
 export const validationError = (
   res: Response,
-  errors: ValidationError[]
+  errors: ValidationError[],
 ): any => {
   const response: ApiResponse = {
     success: false,
     error: {
-      message: 'Validation failed',
+      message: "Validation failed",
       code: 400,
       validationErrors: errors,
     },
@@ -68,6 +68,6 @@ export const validationError = (
 /**
  * Respuesta de no encontrado
  */
-export const notFound = (res: Response, resource: string = 'Resource'): any => {
+export const notFound = (res: Response, resource: string = "Resource"): any => {
   return error(res, `${resource} not found`, 404);
 };

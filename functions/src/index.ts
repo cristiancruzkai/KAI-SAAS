@@ -10,7 +10,7 @@ export {
   kaiSaas_agent_getCollectionByAgentId,
   kaiSaas_agent_getMessagesByChatId,
   // kaiSaas_agent_updateAgent,
-} from './routes/agents.js';
+} from "./routes/agents.js";
 
 // TODO: Auth Routes
 // export {

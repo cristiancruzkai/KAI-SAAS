@@ -3,12 +3,12 @@
  * Define las Cloud Functions HTTP para operaciones de agentes
  */
 
-import { onRequest } from 'firebase-functions/v2/https';
-import { corsMiddleware } from '../middlewares/cors.js';
-import { getAgentById } from '../controllers/agents/getAgentById.js';
-import { getAgentsByUserId } from '../controllers/agents/getAgentsByUserId.js';
-import { getCollectionByAgentId } from '../controllers/agents/getCollectionByAgentId.js';
-import { getMessagesByChatId } from '../controllers/agents/getMessagesByChatId.js';
+import { onRequest } from "firebase-functions/v2/https";
+import { corsMiddleware } from "../middlewares/cors.js";
+import { getAgentById } from "../controllers/agents/getAgentById.js";
+import { getAgentsByUserId } from "../controllers/agents/getAgentsByUserId.js";
+import { getCollectionByAgentId } from "../controllers/agents/getCollectionByAgentId.js";
+import { getMessagesByChatId } from "../controllers/agents/getMessagesByChatId.js";
 // import { updateAgent } from '../controllers/agents/updateAgent.js';
 
 /**
@@ -21,7 +21,7 @@ export const kaiSaas_agent_getAgentById = onRequest(
   async (req, res) => {
     corsMiddleware(req, res as any);
     await getAgentById(req, res as any);
-  }
+  },
 );
 
 /**
@@ -35,7 +35,7 @@ export const kaiSaas_agent_getAgentsByUserId = onRequest(
   async (req, res) => {
     corsMiddleware(req, res as any);
     await getAgentsByUserId(req, res as any);
-  }
+  },
 );
 
 /**
@@ -49,7 +49,7 @@ export const kaiSaas_agent_getCollectionByAgentId = onRequest(
   async (req, res) => {
     corsMiddleware(req, res as any);
     await getCollectionByAgentId(req, res as any);
-  }
+  },
 );
 
 export const kaiSaas_agent_getMessagesByChatId = onRequest(
@@ -59,7 +59,7 @@ export const kaiSaas_agent_getMessagesByChatId = onRequest(
   async (req, res) => {
     corsMiddleware(req, res as any);
     await getMessagesByChatId(req, res as any);
-  }
+  },
 );
 /**
  * Cloud Function: Actualizar agente

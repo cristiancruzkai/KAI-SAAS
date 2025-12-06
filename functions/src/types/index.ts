@@ -1,4 +1,4 @@
-import type { Response } from 'express';
+import type { Response } from "express";
 
 /**
  * Estructura estándar de respuesta de API
@@ -30,7 +30,7 @@ export interface Agent {
   id: string;
   name: string;
   description?: string;
-  status: 'active' | 'inactive' | 'draft';
+  status: "active" | "inactive" | "draft";
   collections?: string[];
   createdAt?: string;
   updatedAt?: string;

@@ -2,9 +2,9 @@
  * Configuración de Firebase Admin SDK
  */
 
-import { initializeApp, getApps, type App } from 'firebase-admin/app';
-import { getFirestore, type Firestore } from 'firebase-admin/firestore';
-import { getAuth, type Auth } from 'firebase-admin/auth';
+import { initializeApp, getApps, type App } from "firebase-admin/app";
+import { getFirestore, type Firestore } from "firebase-admin/firestore";
+import { getAuth, type Auth } from "firebase-admin/auth";
 
 // Inicializar Firebase Admin solo una vez
 let app: App;

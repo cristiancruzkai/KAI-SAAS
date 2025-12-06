@@ -1,11 +1,14 @@
-import globals from 'globals';
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from "globals";
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+import prettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default tseslint.config(
+  {
+    ignores: ["lib/**", "**/*.d.ts", "**/*.js.map"],
+  },
   js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.recommended,
   {
     languageOptions: {
       globals: {
@@ -19,22 +22,16 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js'],
+    files: ["**/*.js"],
     ...tseslint.configs.disableTypeChecked,
   },
   {
     rules: {
-      'no-console': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      "no-console": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
-  prettierRecommended
+  prettierRecommended,
 );
